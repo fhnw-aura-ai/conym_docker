@@ -1,0 +1,30 @@
+{
+  "dn": "inum=AAAA.EEEE,ou=scripts,o=jans",
+  "inum": "AAAA.EEEE",
+  "name": "add_scopes",
+  "aliases": null,
+  "description": "Token and Scope Lifetime Management",
+  "script": "${file: UpdateToken.java}",
+  "scriptType": "update_token",
+  "programmingLanguage": "java",
+  "moduleProperties": [{
+    "value1": "location_type",
+    "value2": "db",
+    "description": "How is the script stored"
+  }],
+  "configurationProperties":  [{
+    "value1": "scope_lifetimes",
+    "value2": "{'default':90}",
+    "description": "scopes to define token lifetimes"
+  },{
+    "value1": "spont_scope_lifetimes",
+    "value2": "{'^access:(\\\\d+)$':[0,100,630,-6]}",
+    "description": "spontaneous scopes to define token lifetimes"
+  }],
+  "level": 1,
+  "revision": 0,
+  "enabled": true,
+  "scriptError": null,
+  "modified": true,
+  "internal": false
+}

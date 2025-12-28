@@ -1,0 +1,22 @@
+{
+  "dn": "inum=AFFA.EBBE,ou=scripts,o=jans",
+  "inum": "AFFA.EBBE",
+  "name": "end_session",
+  "aliases": null,
+  "description": "Session End Management",
+  "script": "${file: SessionEnd.java}",
+  "scriptType": "end_session",
+  "programmingLanguage": "java",
+  "moduleProperties": [{
+    "value1": "location_type",
+    "value2": "db",
+    "description": "How is the script stored"
+  }],
+  "configurationProperties": [],
+  "level": 1,
+  "revision": 0,
+  "enabled": true,
+  "scriptError": null,
+  "modified": true,
+  "internal": false
+}

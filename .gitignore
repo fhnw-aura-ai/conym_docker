@@ -1,0 +1,6 @@
+docker/data/**/*
+*~
+.env.override
+docker/jans/jans-auth-log/
+.#*
+DEADJOE

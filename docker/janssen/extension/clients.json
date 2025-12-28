@@ -1,0 +1,10 @@
+{
+  "auto_scripts": {
+	  "update_token_script_dns":["inum=AAAA.EEEE,ou=scripts,o=jans"],
+	  "post_authn_script_dns":["inum=AAAA.BBBB,ou=scripts,o=jans"]
+  },
+  "spont_scopes": ["^access:\\d+$", "^external:[a-zA-Z0-9.-]+$"],
+  "use_jwt_access_token":false,
+  "extra_scopes": ["authorization_challenge", "conym"],
+  "clients": []
+}

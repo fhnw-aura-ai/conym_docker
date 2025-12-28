@@ -1,0 +1,32 @@
+{
+  "dn": "inum=EEEE.AAAA,ou=scripts,o=jans",
+  "inum": "EEEE.AAAA",
+  "name": "delegated_authentication",
+  "aliases": null,
+  "description": "Testing custom script addition",
+  "script": "${file: DelegatedAuthentication.java}",
+  "scriptType": "person_authentication",
+  "programmingLanguage": "java",
+  "moduleProperties": [{
+    "value1": "location_type",
+    "value2": "db",
+    "description": "How is the script stored"
+  }],
+  "configurationProperties": [
+    {
+      "value1": "disable_local_login",
+      "value2": "false",
+      "description": "Is the script allowed to fallback on the local user database"
+    },{
+	  "value1": "desired_user_claims",
+	  "value2": "['email']",
+	  "description": "What claims shall be taken over for new users if they can be resolved"
+	}
+  ],
+  "level": 100,
+  "revision": 0,
+  "enabled": true,
+  "scriptError": null,
+  "modified": true,
+  "internal": false
+}

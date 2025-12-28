@@ -1,0 +1,22 @@
+{
+  "dn": "inum=QQQQ.DDDD,ou=scripts,o=jans",
+  "inum": "QQQQ.DDDD",
+  "name": "consent_gathering",
+  "aliases": null,
+  "description": "Skip gathering for some scopes when authentication is delegated",
+  "script": "${file: DelegatedConsentGathering.java}",
+  "scriptType": "consent_gathering",
+  "programmingLanguage": "java",
+  "moduleProperties": [{
+    "value1": "location_type",
+    "value2": "db",
+    "description": "How is the script stored"
+  }],
+  "configurationProperties": [],
+  "level": 100,
+  "revision": 0,
+  "enabled": true,
+  "scriptError": null,
+  "modified": true,
+  "internal": false
+}

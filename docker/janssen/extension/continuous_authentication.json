@@ -1,0 +1,7 @@
+{
+  "scope_mapping": {
+    "^access:(\\\\d+)$":[0,100,0,1]
+  },
+  "min_threshold": 20,
+  "cocoa_url_template":"http://{cocoa}/cocoa/authenticate/{device}?authSource="
+}

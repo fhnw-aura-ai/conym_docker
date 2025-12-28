@@ -1,0 +1,64 @@
+{
+  "ready_url" : "jans-config-api/api/v1/jans-auth-server/config",
+  "scopes": [
+    "https://jans.io/oauth/config/scripts.write",
+    "https://jans.io/oauth/jans-auth-server/config/properties.write",
+    "https://jans.io/oauth/config/scopes.write"
+  ],
+
+  "tasks": [
+    {
+      "config_url" : "jans-config-api/api/v1/jans-auth-server/config",
+      "method" : "PATCH",
+      "content_type" : "application/json-patch+json",
+      "content_path" : "/extension/auth_config${DELEGATE_MODE}.json"
+    },{
+      "config_url" : "jans-config-api/api/v1/scopes",
+      "method" : "POST",
+      "fallback_method": "PUT",
+      "content_type" : "application/json",
+      "content_path" : "/extension/conym_scope.json"
+    },{
+      "config_url" : "jans-config-api/api/v1/config/scripts",
+      "method" : "POST",
+      "fallback_method": "PUT",
+      "content_type" : "application/json",
+      "content_path" : "/extension/update_token.json"
+    },{
+      "config_url" : "jans-config-api/api/v1/config/scripts",
+      "method" : "POST",
+      "fallback_method": "PUT",
+      "content_type" : "application/json",
+      "content_path" : "/extension/conym_claims.json"
+    },{
+      "config_url" : "jans-config-api/api/v1/config/scripts",
+      "method" : "POST",
+      "fallback_method": "PUT",
+      "content_type" : "application/json",
+      "content_path" : "/extension/client_registration.json"
+    },{
+      "config_url" : "jans-config-api/api/v1/config/scripts",
+      "method" : "POST",
+      "fallback_method": "PUT",
+      "content_type" : "application/json",
+      "content_path" : "/extension/delegated_auth${DELEGATE_MODE}.json"
+    },{
+      "config_url" : "jans-config-api/api/v1/config/scripts",
+      "method" : "POST",
+      "fallback_method": "PUT",
+      "content_type" : "application/json",
+      "content_path" : "/extension/behavioural_auth.json"
+    },{
+      "config_url" : "jans-config-api/api/v1/config/scripts",
+      "method" : "POST",
+      "fallback_method": "PUT",
+      "content_type" : "application/json",
+      "content_path" : "/extension/token_exchange${DELEGATE_MODE}.json"
+    },{
+      "config_url" : "jans-config-api/api/v1/jans-auth-server/config",
+      "method" : "PATCH",
+      "content_type" : "application/json-patch+json",
+      "content_path" : "/extension/auth_config${DELEGATE_MODE}.json"
+    }
+  ]
+}

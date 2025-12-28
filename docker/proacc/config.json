@@ -1,0 +1,25 @@
+{
+  "port": 80,
+  "base_path": "/proacc",
+  "forward_path": "/forward",
+  "redirect_uri": "https://demoexample.jans.io/proacc/auth_callback",
+  "identity_providers": {
+    "janssen": {
+	  "issuer":"demoexample.jans.io",
+	  "client_id":"170b810d-9195-4ba0-be30-8988da4289a1",
+	  "client_secret":"camz9GCebjNJJk3Mxfg7zyqHJsT9hYTaPy9YBK5X",	  
+	  "trust_store": "unverified",
+	  "subject_type" : "public",
+      "scopes": "email profile openid authorization_challenge"
+    }
+  },  
+  "routes": {
+    "https://postman-echo.com/get": {
+	  "tasks": [{
+        "type":"validate", 
+        "issuer": "janssen",
+        "scopes": ["email"]
+      }]
+    }
+  }
+}

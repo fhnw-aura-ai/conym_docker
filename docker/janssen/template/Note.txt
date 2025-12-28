@@ -1,0 +1,4 @@
+Janssen struggles with the custom folder in newver versions
+Especially on a version update
+Thus on a clean we delete it (allowing janssen to repopulate it)
+This folder contains our modification that we copy over on a up

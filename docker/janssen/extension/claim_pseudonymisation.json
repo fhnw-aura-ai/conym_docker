@@ -1,0 +1,18 @@
+{
+  "cleanup_period": "T30M",
+  "ext_sub_claim": "original_sub",
+  "claims": {
+    "username": { "action": "hide" },
+    "email": {
+      "action": "replace",
+      "mode": "random",
+      "path": "email",
+      "encode": "base64url",
+      "limit": 32,
+      "format": "#$value@$host",
+	  "store-original": true;
+      "lifetime": "T1H",
+      "notify-time": "T10M"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "dn": "inum=VVVV.QQQQ,ou=scripts,o=jans",
+  "inum": "VVVV.QQQQ",
+  "name": "behavioral_auth",
+  "aliases": null,
+  "description": "Allowing for Backend Behavioral Authentication",
+  "script": "${file: BehaviouralAuthentication.java}",
+  "scriptType": "authorization_challenge",
+  "programmingLanguage": "java",
+  "moduleProperties": [{
+    "value1": "location_type",
+    "value2": "db",
+    "description": "How is the script stored"
+  }],
+  "configurationProperties":  [],
+  "level": 50,
+  "revision": 0,
+  "enabled": true,
+  "scriptError": null,
+  "modified": true,
+  "internal": false
+}

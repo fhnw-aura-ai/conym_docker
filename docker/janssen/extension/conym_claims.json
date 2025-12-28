@@ -1,0 +1,22 @@
+{
+  "dn": "inum=BBBB-CCCC,ou=scripts,o=jans",
+  "inum": "BBBB-CCCC",
+  "name": "conym",
+  "aliases": null,
+  "description": "Manages conym specific claims",
+  "script": "${file: ConymUserInfo.java}",
+  "scriptType": "DYNAMIC_SCOPE",
+  "programmingLanguage": "java",
+  "moduleProperties": [{
+    "value1": "location_type",
+    "value2": "db",
+    "description": "How is the script stored"
+  }],
+  "configurationProperties": null,
+  "level": 1,
+  "revision": 0,
+  "enabled": true,
+  "scriptError": null,
+  "modified": true,
+  "internal": false
+}

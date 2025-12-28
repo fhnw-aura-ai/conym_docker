@@ -1,0 +1,13 @@
+{
+  "dn": "inum=FFFF.RRRR,ou=scopes,o=jans",
+  "inum": "FFFF.RRRR",
+  "displayName": "Conym",
+  "id": "conym",
+  "description": "Your data is provided in pseudonymous form to too third parties",
+  "scopeType": "dynamic",
+  "defaultScope": true,
+  "dynamicScopeScripts": [ "inum=BBBB-CCCC,ou=scripts,o=jans" ],
+  "attributes": { "showInConfigurationEndpoint": true },
+  "umaType": false,
+  "baseDn": "inum=FFFF.RRRR,ou=scopes,o=jans"
+}

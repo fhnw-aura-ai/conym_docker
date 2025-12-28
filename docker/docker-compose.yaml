@@ -1,0 +1,252 @@
+x-environment: &env
+    env_file:
+        - path: ./.env.default
+          required: true
+        - path: ./.env.override
+          required: false
+
+services:
+  cocoa:
+    <<: *env
+    build: ./cocoa
+    networks:
+        - internal_network
+    depends_on:
+      cocoa_mariadb:
+        condition: service_healthy
+    volumes:
+      - ./data/cocoa-logs/analytics:/analytics
+    environment: 
+      - DB_HOSTNAME=cocoa_mariadb
+      - DB_DATABASE=cocoa
+      - DB_PORT=3306
+      - DB_USER=cocoa
+      - DB_PASS=${MARIADB_COCOA_PASSWORD}
+      - COCOA_SECURITY_ENABLED
+
+  cocoa_mariadb:
+    <<: *env
+    image: mariadb:11
+    restart: always
+    volumes:
+      - ./data/${COCOA_DB_FOLDER}:/var/lib/mysql
+      - ./mariadb-conf:/docker-entrypoint-initdb.d:ro
+    environment:
+      - MARIADB_ROOT_PASSWORD
+      - MARIADB_COCOA_PASSWORD
+    healthcheck:
+      test: healthcheck.sh --connect --innodb_initialized
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    networks:
+      - internal_network
+
+  postfix:
+    <<: *env
+    build:
+      context: ./postfix
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "25:25"
+    volumes:
+      - ./postfix/config/master.cf:/etc/postfix/master.cf
+      - ./postfix/config/run.config:/etc/service/postfix/run.config:ro
+      - ./postfix/scripts/:/usr/local/bin/
+      - ./data/${POSTFIX_LOG_FOLDER}/resolution-logs:/var/log/mounted-for-postfix
+      - ./data/${POSTFIX_LOG_FOLDER}:/var/log/postfix
+      - ./data/certbot/conf/:/etc/letsencrypt/:ro
+    environment: 
+      - TZ=Europe/Zurich    
+      - MAILNAME=${WEBHOST_NAME}
+      - RDBMS_DATABASE=conym
+      - RDBMS_USER=jans
+      - RDBMS_PASSWORD=${JANSSEN_MYSQL_PASSWORD}
+      - RDBMS_HOST=mysql 
+    networks:
+      - internal_network
+      
+  janssen_config:
+    <<: *env
+    build: ./janssenConfigurer/
+    depends_on:
+      - janssen 
+    volumes:
+      - ./janssenConfigurer/install${DELEGATE_MODE}.json:/config/config.json:ro
+      - ./janssen/extension:/extension
+    environment:
+      - JANSSEN_CUSTOMISATION_CONFIG=/config/config.json
+      - DELEGATE_MODE=${DELEGATE_MODE}  
+      - JANSSEN_CUSTOMISATION_CONFIG_API_URL=https://janssen/
+      - JANSSEN_CUSTOMISATION_AUTH_URL=https://janssen/jans-auth/restv1/token
+      - JANSSEN_CUSTOMISATION_IGNORE_SSL=true
+      - JANSSEN_CUSTOMISATION_CLIENT_ID=9876baac-de39-4c23-8a78-674b59df8c09
+      - JANSSEN_CUSTOMISATION_SECRET=${JANSSEN_ADMIN_PASSWORD}
+    networks:
+      internal_network:
+        aliases:
+          - config
+      
+  proacc:
+    <<: *env
+    build: ./proacc/
+    depends_on:
+      - janssen
+    volumes:
+      - ./proacc/config${DELEGATE_MODE}.json:/config/config.json:ro
+      - ./data/proacc-logs:/logs
+      - ./data/proacc-logs/analytics:/analytics
+    environment:
+      - PROACC_CONFIG=/config/config.json
+      - LOG_FILE=/logs/app.log
+      - PROACC_TRANSPARENCY_ENDPOINT=${PROACC_TRANSPARENCY_ENDPOINT}
+    networks:
+      internal_network:
+        aliases:
+         - proacc
+
+  mysql:
+    <<: *env
+    image: mysql:8.0.30
+    command: "--default-authentication-plugin=mysql_native_password"
+    restart: always
+    volumes:
+      - ./data/${JANSSEN_DB_FOLDER}/mysql:/var/lib/mysql
+      - ./janssen/initdb:/docker-entrypoint-initdb.d
+    networks:
+      internal_network:
+        aliases:
+         - mysql
+    environment:
+      - MYSQL_DATABASE=jans
+      - MYSQL_USER=jans
+      - MYSQL_PASSWORD=${JANSSEN_MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${JANSSEN_MYSQL_PASSWORD}
+      
+  janssen:
+    <<: *env
+    image: ${JANSSEN_IMAGE}
+    restart: always
+    depends_on:
+      - mysql
+
+    networks:
+      internal_network:
+        aliases:
+          - ${WEBHOST_NAME}
+          - janssen
+    environment:
+      - ServerName=${WEBHOST_NAME}
+      - CN_HOSTNAME=${WEBHOST_NAME}
+      - CN_ADMIN_PASS=${JANSSEN_ADMIN_PASSWORD}
+      - CN_ORG_NAME=Aura.ai
+      - CN_EMAIL=markus.knecht@fhnw.ch
+      - CN_CITY=Windisch
+      - CN_STATE=AG
+      - CN_COUNTRY=CH
+      - CN_INSTALL_MYSQL=true
+      - CN_INSTALL_CONFIG_API=true
+      - CN_INSTALL_SCIM=false
+      - CN_INSTALL_FIDO2=false
+      - CN_INSTALL_CASA=false
+      - CN_INSTALL_KC_LINK=false
+      - CN_INSTALL_LOCK=false
+      - CN_INSTALL_SAML=false
+      - CN_INSTALL_OPA=false
+      - TEST_CLIENT_ID=9876baac-de39-4c23-8a78-674b59df8c09
+      - TEST_CLIENT_TRUSTED=true
+      - TEST_CLIENT_SECRET=${JANSSEN_ADMIN_PASSWORD}
+      - RDBMS_DATABASE=jans
+      - CONYM_RDBMS_DATABASE=conym
+      - RDBMS_USER=jans
+      - RDBMS_PASSWORD=${JANSSEN_MYSQL_PASSWORD}
+      - RDBMS_HOST=mysql
+      - COCOA_CON=cocoa:8080
+      
+    volumes:
+      - ./data/janssen/log/auth:/opt/jans/jetty/jans-auth/logs
+      - ./data/janssen/log/config-api:/opt/jans/jetty/jans-config-api/logs
+      - ./data/janssen/log/scim:/opt/jans/jetty/jans-scim/logs
+      - ./data/janssen/log/fido2:/opt/jans/jetty/jans-fido2/log
+      - ./data/${JANSSEN_NOTIFY_FOLDER}:/notify
+      - ./data/${JANSSEN_CREATED_FOLDER}:/created
+      - ./data/${JANSSEN_ANALYTHIC_FOLDER}:/analytics
+      - ./data/${JANSSEN_CERT_FOLDER}:/etc/certs
+      - ./janssen/custom/auth:/opt/jans/jetty/jans-auth/custom
+      - ./janssen/custom/config-api:/opt/jans/jetty/jans-config-api/custom
+      - ./janssen/custom/fido2:/opt/jans/jetty/jans-fido2/custom
+      - ./janssen/custom/scim:/opt/jans/jetty/jans-scim/custom
+      - ./janssen/extension:/extension
+
+  webserver:
+    <<: *env
+    build: ./webserver
+    environment:
+        - WEBHOST_PORT=${WEBHOST_PORT}
+        - WEBHOST_PORT_SSL=${WEBHOST_PORT_SSL}
+        - WEBHOST_NAME=${WEBHOST_NAME}
+        - WEBHOST_COCOA_CERT=${WEBHOST_COCOA_CERT}
+        - WEBHOST_CONYM_CERT=${WEBHOST_CONYM_CERT}
+    ports:
+        - ${WEBHOST_PORT}:80
+        - ${WEBHOST_PORT_SSL}:443
+        - ${WEBHOST_COCOA_PORT_SSL}:444
+    volumes:
+        - type: bind
+          source: ./data/${NGINX_CONF_FOLDER}/${WEBHOST_NAME}.conf
+          target: /etc/nginx/conf.d/${WEBHOST_NAME}.conf
+        - type: bind
+          source: ./data/${NGINX_CONF_FOLDER}/${WEBHOST_NAME}_ssl.conf
+          target: /etc/nginx/conf.d/${WEBHOST_NAME}_ssl.conf
+        - type: bind
+          source: ./data/conymCA.crt
+          target: /etc/nginx/client_ca.crt
+        - ./data/certbot/webroot/:/var/www/certbot/:ro
+        - ./data/certbot/conf/:/etc/letsencrypt/:ro
+    networks:
+        - internal_network
+    depends_on:
+      - cocoa
+      - janssen
+      - proacc
+    restart: unless-stopped
+
+  certbot:
+    build: ./webserver/docker-certbot
+    environment:
+        - WEBHOST_PORT_SSL
+        - WEBHOST_NAME
+        - USE_SELF_SIGNED
+    volumes:
+        - ./data/certbot/webroot/:/var/www/certbot/:rw
+        - ./data/certbot/conf/:/etc/letsencrypt/:rw
+    depends_on:
+        - webserver
+
+  ## Restart daily (at 23:00) certbot and then nginx
+  restarter:
+    <<: *env
+    image: docker:cli
+    restart: unless-stopped
+    volumes: ["/var/run/docker.sock:/var/run/docker.sock"]
+    entrypoint: ["/bin/sh","-c"]
+    environment:
+        - TZ=Europe/Zurich
+    command:
+      - |
+        while true; do
+          if [ "$$(date +'%H:%M')" = '23:00' ]; then
+            echo "$$(date -I) INFO: rerunning certbot (renew certificates)"
+            docker compose -p ${DOCKER_PREFIX} restart certbot
+            sleep 30
+            echo "$$(date -I) INFO: restarting webserver"
+            docker compose -p ${DOCKER_PREFIX} restart webserver
+            sleep 30
+          fi
+          sleep 30
+        done
+        
+networks:
+    internal_network:
+

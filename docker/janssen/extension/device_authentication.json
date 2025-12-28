@@ -1,0 +1,12 @@
+{
+  "allowed_device_auth_methods": ["certificate","credentials"],
+  "enable_client_cert_headers": true,
+  "allow_self_signed_client_cert": true,
+  "client_cert_valid_attr":"ssl-client-verify",
+  "client_cert_attr":"ssl-client-cert",
+  "client_cert_id_derivation_method": "PK:SHA-256:Base64url",
+  "cred_id_param": "device",
+  "cred_secret_param": "device_secret",
+  "client_cred_id_derivation_method": "SHA-256:Base64url",
+  "expiration_time": "P20D"
+}

@@ -1,0 +1,6 @@
+{
+  "cleanup_batch_limit": 500,
+  "expiration_time": "P20D",
+  "cleanup_period": "PT4H",
+  "users":[]
+}

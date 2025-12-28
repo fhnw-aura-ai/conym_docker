@@ -1,0 +1,83 @@
+[
+  {	
+	"op": "replace",
+    "path": "/sessionIdUnusedLifetime",
+    "value": 450
+  },{	
+	"op": "replace",
+    "path": "/sessionIdUnauthenticatedUnusedLifetime",
+    "value": 600
+  },{
+	"op": "replace",
+    "path": "/sessionIdCookieLifetime",
+    "value": 1800	
+  },{
+	"op": "replace",
+    "path": "/sessionIdLifetime",
+    "value": 900
+  },{
+	"op": "replace",
+    "path": "/endSessionWithAccessToken",
+    "value": true	
+  },{
+	"op": "replace",
+    "path": "/invalidateSessionCookiesAfterAuthorizationFlow",
+    "value": true
+  },{
+	"op": "replace",
+    "path": "/frontChannelLogoutSessionSupported",
+    "value": true
+  },{	
+	"op": "replace",
+    "path": "/allowEndSessionWithUnmatchedSid",
+    "value": true
+  },{
+    "op": "replace",
+    "path": "/clientAuthenticationFiltersEnabled",
+    "value": false
+  },{
+    "op": "replace",
+    "path": "/dynamicRegistrationEnabled",
+    "value": true
+  },{
+    "op": "replace",
+    "path": "/dynamicRegistrationExpirationTime",
+    "value": 0
+  },{
+    "op": "replace",
+    "path": "/errorReasonEnabled",
+    "value": true
+  },{
+    "op": "replace",
+    "path": "/loggingLevel",
+    "value": "DEBUG"
+  },{
+    "op": "replace",
+    "path": "/pairwiseIdType",
+    "value": "algorithmic"
+  },{
+    "op": "replace",
+    "path": "/useOpenidSubAttributeValueForPairwiseLocalAccountId",
+    "value": true
+  },{
+    "op": "replace",
+    "path": "/openidSubAttribute",
+    "value": "uid"
+  },{
+    "op": "replace",
+    "path": "/shareSubjectIdBetweenClientsWithSameSectorId",
+    "value": true
+  },{
+    "op": "replace",
+    "path": "/subjectTypesSupported",
+    "value": ["public", "pairwise"]
+  },{
+    "op": "replace",
+    "path": "/allowSpontaneousScopes",
+    "value": true
+  },{
+    "op": "replace",
+    "path": "/spontaneousScopeLifetime",
+    "value": 200000
+  }
+]

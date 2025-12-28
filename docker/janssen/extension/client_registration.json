@@ -1,0 +1,22 @@
+{
+  "dn": "inum=CCCC.RRRR,ou=scripts,o=jans",
+  "inum": "CCCC.RRRR",
+  "name": "dynamic_script_registerer",
+  "aliases": null,
+  "description": "Registers scripts for new clients",
+  "script": "${file: ClientRegistration.java}",
+  "scriptType": "client_registration",
+  "programmingLanguage": "java",
+  "moduleProperties": [{
+    "value1": "location_type",
+    "value2": "db",
+    "description": "How is the script stored"
+  }],
+  "configurationProperties":  [],
+  "level": 1,
+  "revision": 1,
+  "enabled": true,
+  "scriptError": null,
+  "modified": true,
+  "internal": false
+}

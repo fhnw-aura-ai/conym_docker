@@ -1,0 +1,26 @@
+{
+  "dn": "inum=AAAA.BBBB,ou=scripts,o=jans",
+  "inum": "AAAA.BBBB",
+  "name": "behavioral_post_auth",
+  "aliases": null,
+  "description": "Allowing for Session Termination when threshold fails",
+  "script": "${file: PostAuthn.java}",
+  "scriptType": "post_authn",
+  "programmingLanguage": "java",
+  "moduleProperties": [{
+    "value1": "location_type",
+    "value2": "db",
+    "description": "How is the script stored"
+  }],
+  "configurationProperties": [{
+      "value1": "fresh_auth_timeout",
+      "value2": "10000",
+      "description": "Milliseconds that define for how long a regular login superseeds a behavioural one"
+  }],
+  "level": 50,
+  "revision": 0,
+  "enabled": true,
+  "scriptError": null,
+  "modified": true,
+  "internal": false
+}

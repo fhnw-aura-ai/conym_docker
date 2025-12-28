@@ -1,0 +1,39 @@
+{
+  "dn": "inum=EEEE.QQQQ,ou=scripts,o=jans",
+  "inum": "EEEE.QQQQ",
+  "name": "token_exchange",
+  "aliases": null,
+  "description": "Provides Token Exchange Functionality",
+  "script": "${file: TokenExchange.java}",
+  "scriptType": "authorization_challenge",
+  "programmingLanguage": "java",
+  "moduleProperties": [{
+    "value1": "location_type",
+    "value2": "db",
+    "description": "How is the script stored"
+  }],
+  "configurationProperties":  [{
+      "value1": "approved_issuer_files",
+      "value2": "[]",
+      "description": "Files for external server details",
+      "hide": true
+  },{
+    "value1": "subject_id_method",
+    "value2": "client",
+    "description": "How to figure out the subject Type"
+  },{
+    "value1": "subject_id_attribute",
+    "value2": "client",
+    "description": "How to figure out the subject Attribute"
+  },{
+	"value1": "desired_user_claims",
+	"value2": "['email', 'email_verified', 'phone_number', 'phone_number_verified']",
+	"description": "What claims shall be taken over for new users if they can be resolved"
+  }],
+  "level": 50,
+  "revision": 0,
+  "enabled": true,
+  "scriptError": null,
+  "modified": true,
+  "internal": false
+}
