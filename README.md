@@ -67,5 +67,5 @@ The following commands are supported
 - down: stops Conym (the first time the result of the setup is persisted)
 - clean: stops Conym and deletes all state (after this up will execute the setup again)
 
-
-
+## Projectfounding
+![Aura AI Founding](https://www.aura.cyberlab.fhnw.ch/images/aura_ai_Founding.png)
